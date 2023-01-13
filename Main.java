@@ -53,9 +53,66 @@ public class Main {
         }
     }
 
+    public static void sortEachElement(List<String> possibleCombinations) {
+        for (int i = 0; i < possibleCombinations.size(); i++) {
+            String current = possibleCombinations.get(i);
+            char[] chars = current.toCharArray();
+            insertionSort(chars);
+            possibleCombinations.set(i, new String(chars));
+        }
+        // Collections.sort(possibleCombinations);
+        quickSort(possibleCombinations, 0, possibleCombinations.size() - 1);
+    }
+
+    private static void insertionSort(char[] arr) {
+        for (int i = 1; i < arr.length; i++) {
+            char current = arr[i];
+            int j = i - 1;
+            while (j >= 0 && arr[j] > current) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = current;
+        }
+    }
+
+    private static int pivot(List<String> possibleCombinations, int low, int high) {
+        int pivotIndex = low + (high - low) / 2;
+        String pivot = possibleCombinations.get(pivotIndex);
+        int i = low;
+        int j = high;
+        while (i <= j) {
+            while (possibleCombinations.get(i).compareTo(pivot) < 0) {
+                i++;
+            }
+            while (possibleCombinations.get(j).compareTo(pivot) > 0) {
+                j--;
+            }
+            if (i <= j) {
+                String temp = possibleCombinations.get(i);
+                possibleCombinations.set(i, possibleCombinations.get(j));
+                possibleCombinations.set(j, temp);
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+
+    private static void quickSort(List<String> possibleCombinations, int low, int high) {
+        if (low < high) {
+            int pivotIndex = pivot(possibleCombinations, low, high);
+            quickSort(possibleCombinations, low, pivotIndex - 1);
+            quickSort(possibleCombinations, pivotIndex, high);
+        }
+    }
+
     public static void main(String[] args) {
         System.out.println(CartesianProduct1("32"));
         System.out.println(CartesianProduct2("32"));
+        List<String> possibleCombinations = CartesianProduct2("32");
+        sortEachElement(possibleCombinations);
+        System.out.println(possibleCombinations);
 
     }
 }
