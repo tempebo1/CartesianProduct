@@ -25,12 +25,29 @@ public class Main {
         return possibleCombinations;
     }
 
-    public static List<String> CartesianProduct2(String digits) {
+    public static List<String> CartesianProduct2(String digits) throws IllegalArgumentException {
         char[][] digitsmap = { {}, {}, { 'a', 'b', 'c' }, { 'd', 'e', 'f' }, { 'g', 'h', 'i' }, { 'j', 'k', 'l' },
                 { 'm', 'n', 'o' }, { 'p', 'q', 'r', 's' }, { 't', 'u', 'v' }, { 'w', 'x', 'y', 'z' } };
 
         if (digits.equals(""))
             return Collections.emptyList();
+
+        for (int i = 0; i < digits.length(); i++) {
+
+            if (!Character.isDigit(digits.charAt(i))) {
+
+                // if (digits.charAt(i) < '2' || digits.charAt(i) > '9')
+                throw new IllegalArgumentException(
+                        "The input should not be anything , but a number between 2 and 9,\nyour input:"
+                                + digits.charAt(i));
+            }
+
+            else if (digits.charAt(i) - '0' < 2 || digits.charAt(i) - '0' > 9) {
+                throw new IllegalArgumentException(
+                        "The input should be a number between 2 and 9,\nyour input:" + digits.charAt(i));
+            }
+
+        }
 
         List<String> possibleCombinations = new ArrayList<>();
         backTrack(digits, digitsmap, 0, possibleCombinations, new StringBuilder());
@@ -108,11 +125,20 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.println(CartesianProduct1("32"));
-        System.out.println(CartesianProduct2("32"));
-        List<String> possibleCombinations = CartesianProduct2("32");
-        sortEachElement(possibleCombinations);
-        System.out.println(possibleCombinations);
+        try {
+            System.out.println(CartesianProduct1("32"));
+            System.out.println(CartesianProduct2("32"));
+            List<String> possibleCombinations = CartesianProduct2("32");
+            sortEachElement(possibleCombinations);
+            System.out.println(possibleCombinations);
+            // System.out.println(CartesianProduct2("a"));
+            System.out.println(CartesianProduct2("1"));
+
+        } catch (
+
+        Exception e) {
+            System.out.println(e.getMessage());
+        }
 
     }
 }
